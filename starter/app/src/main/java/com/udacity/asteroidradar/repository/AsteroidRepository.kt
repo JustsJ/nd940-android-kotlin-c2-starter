@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.getTodaysFormattedDate
 import com.udacity.asteroidradar.api.getTodaysFormattedEndDate
@@ -22,10 +23,10 @@ class AsteroidRepository(val database: AsteroidDatabase) {
         it.toDomainModel()
     }
 
-    suspend fun getPictureOfTheDay(): String?{
+    suspend fun getPictureOfTheDay(): PictureOfDay?{
         return withContext(Dispatchers.IO){
             try{
-                AsteroidApi.service.getPictureOfTheDay().url
+                AsteroidApi.service.getPictureOfTheDay()
             }
             catch (e: Exception){
                 e.printStackTrace()

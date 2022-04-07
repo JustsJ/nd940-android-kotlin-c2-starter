@@ -1,12 +1,12 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import com.udacity.asteroidradar.repository.getDatabase
 import kotlinx.coroutines.launch
@@ -22,14 +22,14 @@ class MainViewModel(application: Application): ViewModel() {
     val navigateToDetails: LiveData<Asteroid?>
         get() = _navigateToDetails
 
-    private val _pictureOfTheDaySource = MutableLiveData<String>()
-    val pictureOfDaySource: LiveData<String>
-        get() = _pictureOfTheDaySource
+    private val _pictureOfTheDay = MutableLiveData<PictureOfDay>()
+    val pictureOfDay: LiveData<PictureOfDay>
+        get() = _pictureOfTheDay
 
     init {
         viewModelScope.launch {
             repository.refreshAsteroids()
-            _pictureOfTheDaySource.value = repository.getPictureOfTheDay()
+            _pictureOfTheDay.value = repository.getPictureOfTheDay()
         }
     }
 
