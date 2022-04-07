@@ -2,6 +2,10 @@
 
 Asteroid Radar
 
+## Note For Anyone Reviewing
+
+To use the app, you need to add `API_KEY` in `Constants.kt`. You can get one at https://api.nasa.gov/
+
 ## Getting Started
 
 Asteroid Radar is an app to view the asteroids detected by NASA that pass near Earth, you can view all the detected asteroids in a period of time, their data (Size, velocity, distance to Earth) and if they are potentially hazardous.
