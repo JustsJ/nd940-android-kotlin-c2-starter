@@ -1,16 +1,21 @@
 package com.udacity.asteroidradar.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+        ViewModelProvider(this, MainViewModelFactory(requireActivity().application)).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -19,6 +24,27 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.viewModel = viewModel
+
+
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
+                viewModel.navigateToDetailsComplete()
+            }
+        })
+
+        val adapter = AsteroidAdapter(ClickListener {
+            viewModel.navigateToDetails(it)
+        })
+
+        viewModel.asteroids.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.i("MainView","added new asteroids "+it.size)
+                adapter.submitList(it)
+            }
+        })
+
+        binding.asteroidRecycler.adapter = adapter
 
         setHasOptionsMenu(true)
 
