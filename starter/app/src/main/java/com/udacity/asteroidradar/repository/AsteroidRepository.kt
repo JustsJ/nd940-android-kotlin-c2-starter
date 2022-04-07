@@ -22,6 +22,18 @@ class AsteroidRepository(val database: AsteroidDatabase) {
         it.toDomainModel()
     }
 
+    suspend fun getPictureOfTheDay(): String?{
+        return withContext(Dispatchers.IO){
+            try{
+                AsteroidApi.service.getPictureOfTheDay().url
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+                null
+            }
+        }
+    }
+
     suspend fun getAsteroid(id: Long): Asteroid {
         return withContext(Dispatchers.IO){
            database.asteroidDao.getAsteroid(id).toDomainModel()

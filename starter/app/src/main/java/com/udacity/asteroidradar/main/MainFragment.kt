@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
@@ -25,6 +26,13 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        viewModel.pictureOfDaySource.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Picasso.with(context)
+                    .load(it)
+                    .into(binding.activityMainImageOfTheDay)
+            }
+        })
 
         viewModel.navigateToDetails.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -39,7 +47,6 @@ class MainFragment : Fragment() {
 
         viewModel.asteroids.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Log.i("MainView","added new asteroids "+it.size)
                 adapter.submitList(it)
             }
         })

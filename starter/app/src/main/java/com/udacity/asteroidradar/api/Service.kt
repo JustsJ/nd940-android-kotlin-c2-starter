@@ -1,11 +1,13 @@
 package com.udacity.asteroidradar.api
 
+import android.graphics.Picture
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants.API_KEY
 import com.udacity.asteroidradar.Constants.BASE_URL
+import com.udacity.asteroidradar.PictureOfDay
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -37,8 +39,13 @@ private val okhttpClient = OkHttpClient.Builder()
     })
     .build()
 
+private val moshi = Moshi.Builder()
+    .add(KotlinJsonAdapterFactory())
+    .build()
+
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
     .baseUrl(BASE_URL)
     .client(okhttpClient)
     .build()
@@ -47,6 +54,9 @@ interface AsteroidApiService{
     @GET("/neo/rest/v1/feed")
     suspend fun getAsteroids(@Query("start_date") startDate: String,
         @Query("end_date") endDate: String): String
+
+    @GET("/planetary/apod")
+    suspend fun getPictureOfTheDay(): PictureOfDay
 }
 
 object AsteroidApi{
