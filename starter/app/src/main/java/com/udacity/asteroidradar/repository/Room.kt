@@ -30,7 +30,7 @@ fun getDatabase(context: Context): AsteroidDatabase {
             INSTANCE = Room.databaseBuilder(
                 context.applicationContext,
                 AsteroidDatabase::class.java,
-                "videos"
+                "asteroids"
             ).build()
         }
     }
@@ -40,7 +40,7 @@ fun getDatabase(context: Context): AsteroidDatabase {
 @Dao
 interface AsteroidDao {
 
-    @Query("select * from databaseasteroid")
+    @Query("select * from databaseasteroid order by closeApproachDate asc")
     fun getAllAsteroids(): LiveData<List<DatabaseAsteroid>>
 
     @Query("select * from databaseasteroid where id = :id")
